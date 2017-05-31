@@ -1,0 +1,28 @@
+digraph G {
+    subgraph cluster_master {
+        ha[shape="cds"];
+        confd[shape="component"];
+        etcd_master [label="etcd" shape="folder"];
+        label="10.211.55.11";
+        confd->etcd_master;
+        confd->ha;
+    }
+    subgraph cluster_slave1 {
+        etcd_slave1 [label="etcd" shape="folder"];
+        container11[label="container" shape="box3d"];
+        container12[label="container" shape="box3d"];
+        label="10.211.55.12"
+        container11->etcd_slave1;
+        container12->etcd_slave1;
+    }
+    subgraph cluster_slave2 {
+        etcd_slave2 [label="etcd" shape="folder"];
+        container21[label="container" shape="box3d"];
+        container21->etcd_slave2;
+        label="10.211.55.13";
+    }
+    //edge[constraint=false];
+    etcd_slave1->{etcd_master etcd_slave2};
+    etcd_slave2->{etcd_master etcd_slave1};
+    etcd_master->{etcd_slave1 etcd_slave2};
+}
